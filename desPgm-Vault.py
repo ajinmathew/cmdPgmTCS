@@ -282,21 +282,23 @@ def repeat():
     message=input("Enter the Data : ")
     key=input("Enter the Key (Minimum 8 char.) : ")
     cipherText = des.encrypt(key,message,padding=True)
-    des.cipher=cipherText
+    #des.cipher=cipherText
     #saving the key to the vault...
-    print("Saving the Key to Vault")
-    os.system(f'/home/aj1n/Downloads/vault kv put secret/database userKey="{key}"')
+    print("Saving the Key and CiperText to Vault...")
+    os.system(f'/home/aj1n/Downloads/vault kv put secret/database userKey="{key}" userText="{cipherText}"')
     #des.keypass=key
     print("Cipher Text: {}".format(cipherText))
     repeat()
 
   elif inp=="2":
-    print("Encrypted Data is {}".format(des.cipher))
+    #getting the CipherText from the Vault...
+    savedText = sp.getoutput(f'/home/aj1n/Downloads/vault kv get -field=userText secret/database')
+    print("Encrypted Data is {}".format(savedText))
     inp = input("Enter the Key (Minimum 8 char.) : ")
-    #get the key from vault and check...
+    #get the key from vault and check, if it is correct...
     savedKey = sp.getoutput(f'/home/aj1n/Downloads/vault kv get -field=userKey secret/database')
     if inp==savedKey:
-      plain = des.decrypt(inp,des.cipher,padding=True)
+      plain = des.decrypt(inp,savedText,padding=True)
       print("Decrypted Data : {}".format(plain))
     else:
       print("Invalid Key Entered!...")
