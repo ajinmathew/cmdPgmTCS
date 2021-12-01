@@ -142,13 +142,6 @@ ENCRYPT=1
 DECRYPT=0
 
 class DES():
-    def __init__(self):
-        self.password = None
-        self.text = None
-        self.keypass=None
-        self.cipher=None
-        self.keys = list()
-        
     def run(self, key, text, action=ENCRYPT, padding=False):
         if len(key) < 8:
             raise "Key Should be 8 bytes long"
@@ -282,11 +275,9 @@ def repeat():
     message=input("Enter the Data : ")
     key=input("Enter the Key (Minimum 8 char.) : ")
     cipherText = des.encrypt(key,message,padding=True)
-    #des.cipher=cipherText
     #saving the key to the vault...
     print("Saving the Key and CiperText to Vault...")
     os.system(f'/home/aj1n/Downloads/vault kv put secret/database userKey="{key}" userText="{cipherText}"')
-    #des.keypass=key
     print("Cipher Text: {}".format(cipherText))
     repeat()
 
@@ -308,7 +299,6 @@ def repeat():
   
   else:
     print("Invalid Input!...")
-
 
 def main():
     repeat()
